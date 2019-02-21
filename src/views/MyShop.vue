@@ -8,16 +8,17 @@
           <span>王小虎</span>
         </el-header>
         <el-main >
-          <img v-if="list.openUp == '1' " src="../assets/shopStatus/open.jpg" alt="点击关闭店铺" @click="isOpen('1')"/>
+          <img v-if="ruleForm.openUp == '1' " src="../assets/shopStatus/open.jpg" alt="点击关闭店铺" @click="isOpen('1')"/>
           <img v-else  src="../assets/shopStatus/close.jpg" alt="点击关闭店铺" @click="isOpen('0')"/>
           <div v-if="changeType">
-            <h3>{{list.name}}</h3>
-            <h4>地点：{{list.region}}楼{{list.roomNumber}}</h4>
-            <p><span>功能：</span>{{list.tag}}</p>
-            <p><span>备注：</span>{{list.content}}</p>
+            <h3>{{ruleForm.name}}</h3>
+            <h4>地点：{{ruleForm.region}}楼{{ruleForm.roomNumber}}</h4>
+            <p><span>功能：</span>{{ruleForm.tag}}</p>
+            <p><span>备注：</span>{{ruleForm.content}}</p>
             <span @click="ChangeInfo" class="changeM">修改信息</span>
           </div>
           <div v-else>
+            <p><span>取消修改</span></p>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="店铺名称" prop="name">
                 <el-input v-model="ruleForm.name" value="list.name"></el-input>
@@ -30,18 +31,14 @@
               </el-form-item>
               <el-form-item label="服务选项" prop="type">
                 <el-checkbox-group v-model="ruleForm.type">
-                  <el-checkbox label="彩印" name="type"></el-checkbox>
-                  <el-checkbox label="黑白" name="type"></el-checkbox>
-                  <el-checkbox label="胶状" name="type"></el-checkbox>
-                  <el-checkbox label="普通订" name="type"></el-checkbox>
-                  <el-checkbox label="封皮" name="type"></el-checkbox>
-                  <el-checkbox label="相片打印" name="type"></el-checkbox>
-                  <el-checkbox label="海报打印" name="type"></el-checkbox>
-                  <el-checkbox label="送货上门" name="type"></el-checkbox>
+                  <el-checkbox :label="item" :key="id" name="type" v-for="(item, id) in tagNum">{{item}}</el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
-              <el-form-item label="其他说明" prop="desc">
-                <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+              <el-form-item label="针对服务" >
+                <span class="changeM" @click="addTag">添加服务选项标签</span>
+              </el-form-item>
+              <el-form-item label="其他说明" prop="content">
+                <el-input type="textarea" v-model="ruleForm.content"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -60,21 +57,24 @@
 import ShopSide from '@/components/ShopSide'
 import Header from '@/components/Header'
 export default {
+  inject: ['reload'],
   components: {
     ShopSide,
     Header
   },
   data () {
     return {
-      list: [],
+      tagNum: [],
+      tagType: [],
       changeType: true,
+      array: [],
       ruleForm: {
         name: '',
         region: '',
         roomNumber: '',
         type: [],
-        contact: '',
-        desc: ''
+        content: '',
+        tag: ''
       },
       rules: {
         name: [
@@ -90,13 +90,7 @@ export default {
         type: [
           { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
         ],
-        price: [
-          { required: true, message: '请填写价格', trigger: 'change' }
-        ],
-        contact: [
-          { required: true, message: '请填写联系方式', trigger: 'change' }
-        ],
-        desc: [
+        content: [
           { required: true, message: '请填写活动形式', trigger: 'blur' }
         ]
       }
@@ -107,19 +101,39 @@ export default {
     that.axios
       .post(that.$store.state.globalUrl + '/api/shop/get-by-id?sid=' + that.$store.state.uid)
       .then(response => (
-        that.list = response.data.data
+        that.ruleForm = response.data.data
       ))
+    that.axios
+      .get(that.$store.state.globalUrl + '/api/tag/get ')
+      .then(function (response) {
+        that.tagType = response.data.data
+        console.log(that.tagType)
+        for (let i = 0; i < that.tagType.length; i++) {
+          that.tagNum[i] = that.tagType[i].tagName
+          console.log(that.tagType[i].tagName)
+        }
+      })
   },
   methods: {
-    getNewInfo () {
-      let that = this
-      that.axios
-        .post(that.$store.state.globalUrl + '/api/shop/get-by-id?sid=' + that.$store.state.uid)
-        .then(response => (
-          that.list = response.data.data
-        ))
+    addTag () {
+      this.$prompt('请输入标签', '提示', {
+        confirmButtonText: ''
+      }).then(({value}) => {
+        this.$message({
+          type: 'success',
+          message: '添加tag' + value
+
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消输入'
+        })
+      })
     },
     ChangeInfo () {
+      this.array = this.ruleForm.tag.split(' ')
+      console.log(this.array)
       this.changeType = false
     },
     isOpen (type) {

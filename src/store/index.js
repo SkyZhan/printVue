@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     openId: '',
-    globalUrl: 'http://192.168.0.138:81',
+    globalUrl: 'http://118.89.52.224:8999',
     uid: '',
     openShop: '',
     cookie: '',

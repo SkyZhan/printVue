@@ -24,10 +24,9 @@
                     <el-checkbox :label="item" :key="id" name="type" v-for="(item, id) in tagNum">{{item}}</el-checkbox>
                   </el-checkbox-group>
                 </el-form-item>
-                <!--<el-form-item label="针对服务" >-->
-                  <!--<span class="changeM">添加服务选项标签</span>-->
-                <!--</el-form-item>-->
-
+                <el-form-item label="针对服务" >
+                  <span class="changeM">添加服务选项标签</span>
+                </el-form-item>
                 <el-form-item label="其他说明" prop="content">
                   <el-input type="textarea" v-model="ruleForm.content"></el-input>
                 </el-form-item>
