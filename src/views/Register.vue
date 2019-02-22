@@ -63,11 +63,12 @@ export default {
         alert('账号或密码不能为空') // 'http://118.89.52.224:8999/api/user/register'
       } else {
         console.log(account + password)
-        this.axios.get('http://118.89.52.224:8999/api/user/register',
+        this.axios.post(this.$store.state.globalUrl + '/api/user/register',
           { nickName: account, passwd: password }
         ).then(function (res) {
           console.log(res)
           alert('success')
+          this.$router.push('/home')
         }).catch(function (error) {
           console.log(error)
         })

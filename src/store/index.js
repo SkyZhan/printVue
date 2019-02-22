@@ -10,7 +10,7 @@ export default new Vuex.Store({
     uid: '',
     openShop: '',
     cookie: '',
-    accesstooken: ''
+    accesstoken: ''
   },
   mutations: {
     login (state, payload) {

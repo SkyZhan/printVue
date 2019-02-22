@@ -4,7 +4,7 @@
   <div class="container">
     <el-row :gutter="10">
       <el-col :xs="24" :md="4">⭐</el-col>
-      <el-col :xs="24" :md="8">
+      <el-col :xs="24" :md="9">
         <img v-if="list.openUp === '1'" src="../assets/shopStatus/open.jpg" class="pictype" alt="img"/>
         <img v-else src="../assets/shopStatus/open.jpg" class="pictype" alt="img"/>
       </el-col>
@@ -40,13 +40,13 @@ export default {
     let that = this
     console.log(newID)
     that.axios
-      .post('http://118.89.52.224:8999/api/shop/get-by-id?sid=' + newID)
+      .post(that.$store.state.globalUrl + '/api/shop/get-by-id?sid=' + newID)
       .then(function (response) {
         that.list = response.data.data
         console.log(response.data.data)
       })
     that.axios
-      .post('http://118.89.52.224:8999/api/user/get-by-uid?uid=' + newID)
+      .post(that.$store.state.globalUrl + '/api/user/get-by-uid?uid=' + newID)
       .then(response => (
         that.userInfo = response.data.data.wechat
       ))
@@ -54,7 +54,7 @@ export default {
   methods: {
     makeOrder () {
       console.log(this.list.sid)
-      this.route.push('/')
+      this.$router.push({path: '/MakeOrder', query: {shopName: this.list.name}})
     }
   }
 }

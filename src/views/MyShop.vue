@@ -6,10 +6,10 @@
       <el-container>
         <el-header style="text-align: right; font-size: 12px">
           <span>王小虎</span>
-        </el-header>
+        </el-header>A
         <el-main >
-          <img v-if="ruleForm.openUp" src="../assets/shopStatus/open.jpg" alt="点击关闭店铺" @click="isOpen('1')"/>
-          <img v-else  src="../assets/shopStatus/close.jpg" alt="点击关闭店铺" @click="isOpen('0')"/>
+          <img v-if="ruleForm.openUp == '1' " src="../assets/shopStatus/open.jpg" alt="点击关闭店铺" @click="isOpen('1')"/>
+          <img v-if="ruleForm.openUp == '0' "  src="../assets/shopStatus/close.jpg" alt="点击关闭店铺" @click="isOpen('0')"/>
           <div v-if="changeType">
             <h3>{{ruleForm.name}}</h3>
             <h4>地点：{{ruleForm.region}}楼{{ruleForm.roomNumber}}</h4>
@@ -166,8 +166,8 @@ export default {
           })
           .then(function (response) {
             console.log(response.headers)
+            that.ruleForm.openUp = '1'
           })
-        that.reload()
       } else {
         console.log('else')
         that.axios
@@ -179,8 +179,8 @@ export default {
           })
           .then(function (response) {
             console.log(response.data.desc)
+            that.ruleForm.openUp = '0'
           })
-        that.reload()
       }
     },
     submitForm (formName) {
