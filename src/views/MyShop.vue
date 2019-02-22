@@ -8,7 +8,7 @@
           <span>王小虎</span>
         </el-header>
         <el-main >
-          <img v-if="ruleForm.openUp == '1' " src="../assets/shopStatus/open.jpg" alt="点击关闭店铺" @click="isOpen('1')"/>
+          <img v-if="ruleForm.openUp" src="../assets/shopStatus/open.jpg" alt="点击关闭店铺" @click="isOpen('1')"/>
           <img v-else  src="../assets/shopStatus/close.jpg" alt="点击关闭店铺" @click="isOpen('0')"/>
           <div v-if="changeType">
             <h3>{{ruleForm.name}}</h3>
@@ -18,7 +18,7 @@
             <span @click="ChangeInfo" class="changeM">修改信息</span>
           </div>
           <div v-else>
-            <p><span>取消修改</span></p>
+            <p><span class="changeM" @click="UnChange">取消修改</span></p>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
               <el-form-item label="店铺名称" prop="name">
                 <el-input v-model="ruleForm.name" value="list.name"></el-input>
@@ -41,7 +41,7 @@
                 <el-input type="textarea" v-model="ruleForm.content"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+                <el-button type="primary" @click="submitForm('ruleForm')">立即更新</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
               </el-form-item>
             </el-form>
@@ -115,27 +115,43 @@ export default {
       })
   },
   methods: {
+    // 添加标签
     addTag () {
-      this.$prompt('请输入标签', '提示', {
-        confirmButtonText: ''
+      let that = this
+      that.$prompt('请输入标签', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
       }).then(({value}) => {
-        this.$message({
+        that.$message({
           type: 'success',
           message: '添加tag' + value
-
         })
+        that.axios
+          .post(that.$store.state.globalUrl + '/api/tag/create?tagName=' + value, {}, {
+            headers: {'accesstoken': that.$store.state.accesstoken}
+          })
+          .then(function (response) {
+            console.log(response.data.desc)
+            that.tagNum.push(value)
+            console.log(that.tagNum)
+          })
       }).catch(() => {
-        this.$message({
+        that.$message({
           type: 'info',
           message: '取消输入'
         })
       })
+    },
+    // no chang
+    UnChange () {
+      this.changeType = true
     },
     ChangeInfo () {
       this.array = this.ruleForm.tag.split(' ')
       console.log(this.array)
       this.changeType = false
     },
+    // 开关店控制
     isOpen (type) {
       let that = this
       if (type === '0') {
@@ -151,6 +167,7 @@ export default {
           .then(function (response) {
             console.log(response.headers)
           })
+        that.reload()
       } else {
         console.log('else')
         that.axios
@@ -163,6 +180,7 @@ export default {
           .then(function (response) {
             console.log(response.data.desc)
           })
+        that.reload()
       }
     },
     submitForm (formName) {

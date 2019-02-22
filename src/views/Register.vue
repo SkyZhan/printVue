@@ -9,10 +9,10 @@
           <el-input v-model="regForm.account" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="regForm.password" placeholder="请输入密码" type="password"></el-input>
+          <el-input v-model="regForm.password" placeholder="请输入密码" type="password"></el-input>reg
         </el-form-item>
         <el-form-item label="重复密码" prop="repeat">
-          <el-input v-model="regForm.repeat" placeholder="请输入密码" type="password"></el-input>
+          <el-input v-model="regForm.repeat" placeholder="请输入密码" type="password" @keyup.enter.native="reg"></el-input>
         </el-form-item>
         <el-form-item>
           <span @click="toLogin">想要登陆？点击此处</span>

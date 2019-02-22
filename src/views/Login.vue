@@ -9,7 +9,7 @@
           <el-input v-model="loginForm.account" placeholder="请输入账号"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="loginForm.password" placeholder="请输入密码" type="password"></el-input>
+          <el-input v-model="loginForm.password" placeholder="请输入密码" type="password" @keyup.enter.native="login"></el-input>
         </el-form-item>
         <el-form-item>
           <span @click="toReg">还未注册？点击此处</span>

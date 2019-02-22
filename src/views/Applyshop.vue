@@ -25,7 +25,7 @@
                   </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="针对服务" >
-                  <span class="changeM">添加服务选项标签</span>
+                  <span class="changeM" @click="addTag">添加服务选项标签</span>
                 </el-form-item>
                 <el-form-item label="其他说明" prop="content">
                   <el-input type="textarea" v-model="ruleForm.content"></el-input>
@@ -104,6 +104,33 @@ export default {
       })
   },
   methods: {
+    // 添加标签
+    addTag () {
+      let that = this
+      that.$prompt('请输入标签', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({value}) => {
+        that.$message({
+          type: 'success',
+          message: '添加tag' + value
+        })
+        that.axios
+          .post(that.$store.state.globalUrl + '/api/tag/create?tagName=' + value, {
+            header: {'accesstoken': that.$store.state.accesstoken}
+          })
+          .then(function (response) {
+            console.log(response.data.desc)
+            that.tagNum.push(value)
+            console.log(that.tagNum)
+          })
+      }).catch(() => {
+        that.$message({
+          type: 'info',
+          message: '取消输入'
+        })
+      })
+    },
     submitForm: function (formName) {
       let that = this
       let tag = ' '
