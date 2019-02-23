@@ -147,7 +147,6 @@ export default {
           }).then(data => {
             console.log(data)
             document.getElementById('uploadFileInput').value = '' // 上传成功，把input的value设置为空，不然 无法两次选择同一张图片
-            // 上传成功...  (登录七牛账号，找到七牛给你的 URL地址) 和 data里面的key 拼接成图片下载地址
             let list = []
             list.name = file.name
             list.url = data.request.responseURL
