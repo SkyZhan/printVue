@@ -31,7 +31,7 @@ export default {
   data: function () {
     return {
       list: [],
-      id: this.$route.query.id,
+      id: this.$route.params.id,
       userInfo: ''
     }
   },
@@ -54,7 +54,7 @@ export default {
   methods: {
     makeOrder () {
       console.log(this.list.sid)
-      this.$router.push({path: '/MakeOrder', query: {shopName: this.list.name}})
+      this.$router.push({name: 'MakeOrder', params: {shopName: this.list.name, shopId: this.list.sid}})
     }
   }
 }

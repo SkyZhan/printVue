@@ -4,8 +4,15 @@
     <Header>
     </Header>
   </div>
-  <input @change="uploadInputchange"  id="uploadFileInput" type="file" accept="image/*">
-  <h3>{{shopName}}</h3>
+  <input @change="uploadInputchange"  id="uploadFileInput" type="file" accept="*">
+  <br/>
+  <ul class="upload-list">
+    <li  v-for="(file, index) in fileList" class="upload-list-li" :key="index">
+      <a class="upload-list-li-name"><i class="fa fa-file-text-o" aria-hidden="true"></i>{{file.name}}</a>
+      <label class="upload-list-li-label" @click="deleFile(index, file.name)"><i class="el-icon-close"></i></label>
+    </li>
+  </ul>
+  <h3>{{this.$route.params.shopName}}{{this.$route.params.shopId}}</h3>
   <el-row :gutter="10">
     <el-col :xs="24" :md="8">
       <el-form :label-position="labelPosition" label-width="80px" :model="form">
@@ -48,18 +55,17 @@ export default {
       delivery: '',
       deliveryType: ['自提', '送货上门'],
       labelPosition: 'right',
-      shopName: this.$route.query.shopName,
+      shopId: this.$route.params.shopId,
       picker: '',
       uptoken: '',
-      filename: '',
+      fileList: [],
       form: {
         name: '',
         delivery: '',
         phoneNumber: '',
         region: '',
         requirement: ''
-      },
-      doMain: 'pic.heartqiu.cn/'
+      }
     }
   },
   mounted () {
@@ -87,24 +93,52 @@ export default {
       console.log('取到的值是' + event.target.value)
       this.isDelivery = event.target.value !== '自提'
     },
+    deleFile (i, name) {
+      this.fileList.splice(i, 1)
+    },
+    getUploadName (file) {
+      let date = new Date()
+      let seperator1 = ''
+      let year = date.getFullYear()
+      let month = date.getMonth() + 1
+      let strDate = date.getDate()
+      if (month >= 1 && month <= 9) {
+        month = '0' + month
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = '0' + strDate
+      }
+      let isdate = year + seperator1 + month + seperator1 + strDate
+      let index1 = file.name.lastIndexOf('.')
+      let index2 = file.name.length
+      let post = file.name.substring(index1, index2)
+      let name = this.$store.state.uid + isdate + file.size + Math.floor(Math.random() * 256) + post
+      return name
+    },
     uploadInputchange () {
-      let file = document.getElementById('uploadFileInput').files[0] // 选择的图片文件
-      console.log(file)
-      this.uploadImgToQiniu(file)
+      if (this.fileList.length >= 3) {
+        alert('最多上传3个文件！')
+      } else {
+        let file = document.getElementById('uploadFileInput').files[0] // 选择的图片文件
+        this.uploadImgToQiniu(file)
+      }
     },
     uploadImgToQiniu (file) {
       let that = this
+      let filename = that.getUploadName(file)
+      console.log('filename' + filename)
       this.axios
-        .get(this.$store.state.globalUrl + '/qiniu/upload-with-no-pic-name', {}, {
+        .get(this.$store.state.globalUrl + '/qiniu/upload-with-pic-name?picName=' + filename, {}, {
           headers: {'accesstoken': this.$store.state.accesstoken}
         })
         .then(function (response) {
-          console.log('here')
+          console.log('here' + response.data)
           that.uptoken = response.data
           const axiosInstance = that.axios.create({withCredentials: false})
           let data = new FormData()
           data.append('token', response.data)
           data.append('file', file)
+          data.append('key', filename)
           axiosInstance({
             method: 'POST',
             url: 'http://up-z2.qiniup.com',
@@ -114,6 +148,10 @@ export default {
             console.log(data)
             document.getElementById('uploadFileInput').value = '' // 上传成功，把input的value设置为空，不然 无法两次选择同一张图片
             // 上传成功...  (登录七牛账号，找到七牛给你的 URL地址) 和 data里面的key 拼接成图片下载地址
+            let list = []
+            list.name = file.name
+            list.url = data.request.responseURL
+            that.fileList.push(list)
           }).catch((err) => {
             console.log(err)
           })
@@ -124,5 +162,10 @@ export default {
 </script>
 
 <style scoped>
-
+  .upload-list{margin:0;padding:0;list-style:none;}
+  .upload-list-li{position: relative;margin-top:5px;line-height: 1.8}
+  .upload-list-li:hover{background-color: #f5f7fa;}
+  .upload-list-li-name{position:relative;margin-right: 40px;display: block;}
+  .fa-file-text-o{margin-right:7px;}
+  .upload-list-li-label{position:absolute;right:5px;top:0;}
 </style>

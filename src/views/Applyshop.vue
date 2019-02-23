@@ -152,7 +152,7 @@ export default {
                 tag: tag
               }, {
                 headers: {
-                  'accesstoken': '5-7762e39c640684ab8ec8c1cd6a45480f'
+                  'accesstoken': this.$store.state.accesstoken
                 }
               })
             .then(function (response) {

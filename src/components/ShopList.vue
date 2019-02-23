@@ -3,7 +3,7 @@
   <el-row :gutter="10">
     <el-col :xs="24" :md="5" v-for="item in shopList" :key="item.sid" style="padding-left: 0;
     padding-right: 0;">
-      <router-link :to="{path: '/ShopDetail', query:{id: item.sid }}">
+      <router-link :to="{name: 'ShopDetail', params: {id: item.sid }}">
         <img v-if="item.openUp == '1'" src="../assets/shopStatus/open.jpg" class="pic_style"/>
         <img v-else src="../assets/shopStatus/close.jpg" class="pic_style"/>
         <el-main>{{item.name}}</el-main>

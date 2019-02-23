@@ -33,8 +33,10 @@
               <el-form-item label="微信">
                 <el-input v-model="form.wechat"></el-input>
               </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitDetail('form')" plain>确认修改</el-button>
+              </el-form-item>
             </el-form>
-            <el-button type="primary" @click="submitDetail" plain>确认修改</el-button>
           </div>
         </el-main>
       </el-container>
@@ -59,7 +61,8 @@ export default {
         nickName: '',
         sex: '',
         telNum: '',
-        wechat: ''
+        wechat: '',
+        passwd: ''
       }
     }
   },
@@ -75,7 +78,25 @@ export default {
     changDetail () {
       this.changeResult = false
     },
-    submitDetail () {
+    submitDetail (form) {
+      let that = this
+      that.axios
+        .post(that.$store.state.globalUrl + '/api/user/update-by-uid',
+          {
+            uid: this.$store.state.uid,
+            nickName: form.name,
+            sex: form.sex,
+            telNum: form.telNum,
+            wechat: form.wechat
+
+          }, {
+            headers: {
+              'accesstoken': this.$store.state.accesstoken
+            }
+          })
+        .then(function (response) {
+          console.log('success')
+        })
       this.changeResult = true
     }
   }
