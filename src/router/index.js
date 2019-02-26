@@ -10,6 +10,8 @@ import PersonalCenter from '@/views/PersonalCenter'
 import ApplyShop from '@/views/ApplyShop'
 import MyShop from '@/views/MyShop'
 import MyShopOrder from '@/views/MyShopOrder'
+import MySearch from '@/views/MySearch'
+import MyOrder from '@/views/MyOrder'
 Vue.use(Router)
 
 export default new Router({
@@ -62,9 +64,19 @@ export default new Router({
       component: MyShop
     },
     {
-      path: 'MyShopOrder',
+      path: '/MyShopOrder',
       name: 'MyShopOrder',
       component: MyShopOrder
+    },
+    {
+      path: '/MySearch',
+      name: 'MySearch',
+      component: MySearch
+    },
+    {
+      path: '/MyOrder',
+      name: 'MyOrder',
+      component: MyOrder
     }
   ]
 })

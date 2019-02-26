@@ -6,7 +6,7 @@
       <el-container>
         <el-header style="text-align: right; font-size: 12px">
           <span>王小虎</span>
-        </el-header>A
+        </el-header>
         <el-main >
           <img v-if="ruleForm.openUp == '1' " src="../assets/shopStatus/open.jpg" alt="点击关闭店铺" @click="isOpen('1')"/>
           <img v-if="ruleForm.openUp == '0' "  src="../assets/shopStatus/close.jpg" alt="点击关闭店铺" @click="isOpen('0')"/>
@@ -184,14 +184,7 @@ export default {
       }
     },
     submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+      console.log(formName.type)
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()

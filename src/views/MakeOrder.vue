@@ -4,15 +4,7 @@
     <Header>
     </Header>
   </div>
-  <input @change="uploadInputchange"  id="uploadFileInput" type="file" accept="*">
-  <br/>
-  <ul class="upload-list">
-    <li  v-for="(file, index) in fileList" class="upload-list-li" :key="index">
-      <a class="upload-list-li-name"><i class="fa fa-file-text-o" aria-hidden="true"></i>{{file.name}}</a>
-      <label class="upload-list-li-label" @click="deleFile(index, file.name)"><i class="el-icon-close"></i></label>
-    </li>
-  </ul>
-  <h3>{{this.$route.params.shopName}}{{this.$route.params.shopId}}</h3>
+  <h3>{{this.$route.params.shopName}}</h3>
   <el-row :gutter="10">
     <el-col :xs="24" :md="8">
       <el-form :label-position="labelPosition" label-width="80px" :model="form">
@@ -27,6 +19,16 @@
         </el-form-item>
         <el-form-item label="手机号码" v-if="isDelivery">
           <el-input v-model="form.phoneNumber"></el-input>
+        </el-form-item>
+        <el-form-item label="打印文件">
+          <input @change="uploadInputchange"  id="uploadFileInput" type="file" accept="*">
+          <p>图片及文件（docx,pdf etc.）最多上传3个文件！</p>
+          <ul class="upload-list">
+            <li  v-for="(file, index) in fileList" class="upload-list-li" :key="index">
+              <a class="upload-list-li-name"><i class="fa fa-file-text-o" aria-hidden="true"></i>{{file.name}}</a>
+              <label class="upload-list-li-label" @click="deleFile(index, file.name)"><i class="el-icon-close"></i></label>
+            </li>
+          </ul>
         </el-form-item>
         <el-form-item label="打印要求">
           <el-input type="textarea" v-model="form.requirement"></el-input>
@@ -43,7 +45,7 @@
 
 <script>
 import Header from '@/components/Header'
-
+import qs from 'qs'
 export default {
   components: {
     Header
@@ -58,10 +60,12 @@ export default {
       shopId: this.$route.params.shopId,
       picker: '',
       uptoken: '',
-      fileList: [],
+      fileList: [
+        {name: 'open.jpg', url: 'http://up-z2.qiniup.com/5201902251771164.jpg'},
+        {name: 'close.jpg', url: 'http://up-z2.qiniup.com/5201902251619453.jpg'}
+      ],
       form: {
         name: '',
-        delivery: '',
         phoneNumber: '',
         region: '',
         requirement: ''
@@ -86,15 +90,52 @@ export default {
       console.log(val)
     },
     onSubmit () {
-      console.log(this.delivery)
-      console.log('submit!')
+      let that = this
+      let fileName = ''
+      let fileUrl = ''
+      for (let i = 0; i < that.fileList.length; i++) {
+        fileName = fileName + that.fileList[i].name + ' '
+        fileUrl = fileUrl + that.fileList[i].url + ' '
+      }
+      let thetag = that.delivery + '-' + that.form.name + '-' + that.form.phoneNumber + '-' + that.form.region
+      let obj = {
+        sid: that.$route.params.shopId,
+        fileName: fileName,
+        fileUrl: fileUrl,
+        requirement: that.form.requirement,
+        tag: thetag,
+        status: '0'
+      }
+      that.axios
+        .post(that.$store.state.globalUrl + '/api/order/create', qs.stringify(obj),
+          {headers: {'accesstoken': that.$store.state.accesstoken}}
+        )
+        .then(function (response) {
+          console.log(response.data)
+        })
+      console.log('submit!' + thetag + fileUrl)
     },
     CouldDelivery (event) {
       console.log('取到的值是' + event.target.value)
       this.isDelivery = event.target.value !== '自提'
     },
     deleFile (i, name) {
-      this.fileList.splice(i, 1)
+      this.$confirm(`确定移除${this.fileList[i].name}？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+        this.fileList.splice(i, 1)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
     getUploadName (file) {
       let date = new Date()
@@ -149,7 +190,8 @@ export default {
             document.getElementById('uploadFileInput').value = '' // 上传成功，把input的value设置为空，不然 无法两次选择同一张图片
             let list = []
             list.name = file.name
-            list.url = data.request.responseURL
+            list.url = 'https://pic.heartqiu.cn/' + filename
+            console.log(list)
             that.fileList.push(list)
           }).catch((err) => {
             console.log(err)
