@@ -4,9 +4,10 @@
     <Header>
     </Header>
   </div>
-  <h3>{{this.$route.params.shopName}}</h3>
   <el-row :gutter="10">
     <el-col :xs="24" :md="8">
+      <h3>位置：下单状态</h3>
+      <h3>{{this.$route.params.shopName}}</h3>
       <el-form :label-position="labelPosition" label-width="80px" :model="form">
         <el-form-item label="收货人">
           <el-input v-model="form.name"></el-input>
@@ -60,10 +61,7 @@ export default {
       shopId: this.$route.params.shopId,
       picker: '',
       uptoken: '',
-      fileList: [
-        {name: 'open.jpg', url: 'http://up-z2.qiniup.com/5201902251771164.jpg'},
-        {name: 'close.jpg', url: 'http://up-z2.qiniup.com/5201902251619453.jpg'}
-      ],
+      fileList: [],
       form: {
         name: '',
         phoneNumber: '',

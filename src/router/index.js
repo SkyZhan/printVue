@@ -19,7 +19,7 @@ export default new Router({
   linkActiveClass: 'active',
   routes: [
     {
-      path: '/',
+      path: '/login',
       name: 'login',
       component: Login
     },
@@ -27,6 +27,11 @@ export default new Router({
       path: '/Register',
       name: 'register',
       component: Register
+    },
+    {
+      path: '/',
+      name: 'Home',
+      component: Home
     },
     {
       path: '/ShopDetail',
@@ -42,11 +47,6 @@ export default new Router({
       path: '/MakeOrder',
       name: 'MakeOrder',
       component: MakeOrder
-    },
-    {
-      path: '/Home',
-      name: 'Home',
-      component: Home
     },
     {
       path: '/PersonalCenter',

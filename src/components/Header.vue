@@ -15,7 +15,7 @@ export default {
   data () {
     return {
       navList: [
-        {name: '/Home', navItem: '首页'},
+        {name: '/', navItem: '首页'},
         {name: '/MySearch', navItem: '我的搜索'},
         {name: '/MyOrder', navItem: '我的订单'},
         {name: '/personalCenter', navItem: '个人中心'}

@@ -3,10 +3,13 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 
+function storeLocalStore (state) {
+  window.localStorage.setItem('userMsg', JSON.stringify(state))
+}
 export default new Vuex.Store({
   state: {
     openId: '',
-    globalUrl: 'http://118.89.52.224:8999',
+    globalUrl: 'http://127.0.0.1:81',
     uid: '',
     openShop: '',
     cookie: '',
@@ -20,9 +23,11 @@ export default new Vuex.Store({
       state.cookie = payload.cookie
       state.accesstoken = payload.accesstoken
       console.log('STATE' + state.accesstoken)
+      storeLocalStore(state)
     },
     submitForm (state, payload) {
       state.openShop = payload.openShop
+      storeLocalStore(state)
     }
   }
 

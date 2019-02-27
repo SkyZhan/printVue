@@ -36,8 +36,9 @@ export default {
     }
   },
   mounted () {
-    let newID = this.id
     let that = this
+    if (that.id != null) { localStorage.setItem('newID', this.id) }
+    let newID = localStorage.getItem('newID')
     console.log(newID)
     that.axios
       .post(that.$store.state.globalUrl + '/api/shop/get-by-id?sid=' + newID)

@@ -12,8 +12,14 @@
                 <el-form-item label="订单编号">
                   <span>{{ props.row.oid }}</span>
                 </el-form-item>
-                <el-form-item label="订单标签">
+                <el-form-item label="订单">
                   <span>{{ props.row.tag }}</span>
+                </el-form-item>
+                <el-form-item label="店铺名称">
+                  <span>{{ props.row.name}}</span>
+                </el-form-item>
+                <el-form-item label="店铺地址">
+                  <span>{{ props.row.locate }}</span>
                 </el-form-item>
                 <el-form-item label="店铺 ID">
                   <span>{{ props.row.sid }}</span>
@@ -35,8 +41,8 @@
             prop="oid">
           </el-table-column>
           <el-table-column
-            label="店铺 ID"
-            prop="sid">
+            label="店铺名称"
+            prop="name">
           </el-table-column>
           <el-table-column
             label="打印要求描述"
@@ -65,6 +71,12 @@
                 <el-form-item label="订单">
                   <span>{{ props.row.tag }}</span>
                 </el-form-item>
+                <el-form-item label="店铺名称">
+                  <span>{{ props.row.name}}</span>
+                </el-form-item>
+                <el-form-item label="店铺地址">
+                  <span>{{ props.row.locate }}</span>
+                </el-form-item>
                 <el-form-item label="店铺 ID">
                   <span>{{ props.row.sid }}</span>
                 </el-form-item>
@@ -85,8 +97,8 @@
             prop="oid">
           </el-table-column>
           <el-table-column
-            label="店铺 ID"
-            prop="sid">
+            label="店铺名称"
+            prop="name">
           </el-table-column>
           <el-table-column
             label="打印要求描述"
@@ -128,19 +140,19 @@ export default {
         let objArray = response.data.data
         let fileArray = []
         for (let i = 0; i < objArray.length; i++) {
+          console.log(objArray[i])
           let fileNameList = (objArray[i].fileName || '').split(' ') // split use in vue
           let fileUrlList = (objArray[i].fileUrl || '').split(' ') // split use in vue
           let obj = {}
-          console.log(i)
           for (let j = 0; j < fileNameList.length; j++) {
             obj.name = fileNameList[j]
             obj.url = fileUrlList[j]
-            console.log('here' + j)
             fileArray.push(obj)
           }
-          console.log(fileArray)
           obj = {}
           let order = {}
+          order.name = objArray[i].name
+          order.locate = objArray[i].region + objArray[i].roomNumber
           order.fileList = fileArray
           order.oid = objArray[i].oid
           order.sid = objArray[i].sid
@@ -149,8 +161,7 @@ export default {
           order.requirement = objArray[i].requirement
           that.orderArray.push(order)
           fileArray = []
-          order = []
-          console.log(that.orderArray)
+          order = {}
         }
       })
   },

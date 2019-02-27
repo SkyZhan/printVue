@@ -88,19 +88,22 @@ export default {
   mounted () {
     let that = this
     that.axios
-      .post(that.$store.state.globalUrl + '/api/user/get-by-uid?uid=' + that.$store.state.uid)
-      .then(function (response) {
-        that.nickName = response.data.data.nickName
-      })
-    that.axios
       .get(that.$store.state.globalUrl + '/api/tag/get ')
       .then(function (response) {
         that.tagType = response.data.data
         console.log(that.tagType)
+        let array = []
         for (let i = 0; i < that.tagType.length; i++) {
-          that.tagNum[i] = that.tagType[i].tagName
-          console.log(that.tagType[i].tagName)
+          // that.tagNum[i] = that.tagType[i].tagName
+          array.push(that.tagType[i].tagName)
+          // console.log(that.tagType[i].tagName)
         }
+        that.tagNum = array
+      })
+    that.axios
+      .post(that.$store.state.globalUrl + '/api/user/get-by-uid?uid=' + that.$store.state.uid)
+      .then(function (response) {
+        that.nickName = response.data.data.nickName
       })
   },
   methods: {

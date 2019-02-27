@@ -57,18 +57,30 @@ export default {
   },
   methods: {
     reg () {
-      let account = this.regForm.account
-      let password = this.regForm.password
+      let that = this
+      let account = that.regForm.account
+      let password = that.regForm.password
       if (account === '' || password === '') {
         alert('账号或密码不能为空') // 'http://118.89.52.224:8999/api/user/register'
       } else {
         console.log(account + password)
-        this.axios
-          .post(this.$store.state.globalUrl + '/api/user/register?nickName=' + account + '&passwd=' + password)
-          .then(function (res) {
-            console.log(res)
-            alert('success')
-            this.$router.push('/home')
+        that.axios
+          .post(that.$store.state.globalUrl + '/api/user/register?nickName=' + account + '&passwd=' + password)
+          .then(function (response) {
+            let openId = response.data.data.openId
+            let uid = response.data.data.uid
+            let openShop = response.data.data.openShop
+            let accesstoken = uid + '-' + openId
+            // 设置cookie
+            let exdate = new Date()
+            exdate.setTime(exdate.getTime() + (365 * 24 * 60 * 1000))
+            let expires = 'expires=' + exdate.toUTCString()
+            let cookie = 'uid=' + uid + '; ' + expires
+            document.cookie = cookie
+            document.cookie = 'session=' + openId + '; ' + expires
+            console.log(cookie)
+            that.$store.commit('login', {openId: openId, uid: uid, openShop: openShop, cookie: cookie, accesstoken: accesstoken})
+            that.$router.push('/home')
           })
           .catch(function (error) {
             console.log(error)

@@ -30,8 +30,8 @@
                 <el-input v-model="ruleForm.roomNumber" placeholder="如：212"></el-input>
               </el-form-item>
               <el-form-item label="服务选项" prop="type">
-                <el-checkbox-group v-model="ruleForm.type">
-                  <el-checkbox :label="item" :key="id" name="type" v-for="(item, id) in tagNum">{{item}}</el-checkbox>
+                <el-checkbox-group v-model="type">
+                  <el-checkbox :label="item" :key="item"  v-for="item in tagNum">{{item}}</el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
               <el-form-item label="针对服务" >
@@ -56,6 +56,7 @@
 <script>
 import ShopSide from '@/components/ShopSide'
 import Header from '@/components/Header'
+import qs from 'qs'
 export default {
   inject: ['reload'],
   components: {
@@ -66,13 +67,13 @@ export default {
     return {
       tagNum: [],
       tagType: [],
+      type: [],
       changeType: true,
       array: [],
       ruleForm: {
         name: '',
         region: '',
         roomNumber: '',
-        type: [],
         content: '',
         tag: ''
       },
@@ -86,9 +87,6 @@ export default {
         ],
         roomNumber: [
           { required: true, message: '请填写房号，如：212', trigger: 'change' }
-        ],
-        type: [
-          { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
         ],
         content: [
           { required: true, message: '请填写活动形式', trigger: 'blur' }
@@ -108,10 +106,11 @@ export default {
       .then(function (response) {
         that.tagType = response.data.data
         console.log(that.tagType)
+        let array = []
         for (let i = 0; i < that.tagType.length; i++) {
-          that.tagNum[i] = that.tagType[i].tagName
-          console.log(that.tagType[i].tagName)
+          array.push(that.tagType[i].tagName)
         }
+        that.tagNum = array
       })
   },
   methods: {
@@ -184,7 +183,37 @@ export default {
       }
     },
     submitForm (formName) {
-      console.log(formName.type)
+      let that = this
+      let tagString = ' '
+      for (let i = 0; i < that.type.length; i++) {
+        tagString = tagString + that.type[i] + ' '
+      }
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let obj = {
+            sid: that.$store.state.uid,
+            content: that.ruleForm.content,
+            name: that.ruleForm.name,
+            region: that.ruleForm.region,
+            roomNumber: that.ruleForm.roomNumber,
+            tag: tagString
+          }
+          that.axios
+            .post(that.$store.state.globalUrl + '/api/shop/update', qs.stringify(obj), {
+              headers: {
+                'accesstoken': this.$store.state.accesstoken
+              }
+            })
+            .then(function (response) {
+              console.log('success')
+              that.ruleForm.tag = tagString
+              that.changeType = true
+            })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
