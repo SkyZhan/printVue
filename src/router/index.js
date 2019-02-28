@@ -12,6 +12,7 @@ import MyShop from '@/views/MyShop'
 import MyShopOrder from '@/views/MyShopOrder'
 import MySearch from '@/views/MySearch'
 import MyOrder from '@/views/MyOrder'
+import PublicFile from '@/views/PublicFile'
 Vue.use(Router)
 
 export default new Router({
@@ -77,6 +78,11 @@ export default new Router({
       path: '/MyOrder',
       name: 'MyOrder',
       component: MyOrder
+    },
+    {
+      path: '/PublicFile',
+      name: 'PublicFile',
+      component: PublicFile
     }
   ]
 })

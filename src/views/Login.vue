@@ -48,7 +48,9 @@ export default {
       } else {
         console.log(account + password)
         this.axios
-          .post(that.$store.state.globalUrl + '/api/user/login?account=' + account + '&passwd=' + password)
+          .post(that.$store.state.globalUrl + '/api/user/login?account=' + account + '&passwd=' + password, {}, {
+            headers: {'accesstoken': '5-7762e39c640684ab8ec8c1cd6a45480f'}
+          })
           .then(function (response) {
             console.log(response.data.data)
             let openId = response.data.data.openId
@@ -63,8 +65,8 @@ export default {
             document.cookie = cookie
             document.cookie = 'session=' + openId + '; ' + expires
             console.log(cookie)
-            that.$store.commit('login', {openId: openId, uid: uid, openShop: openShop, cookie: cookie, accesstoken: accesstoken})
-            that.$router.push('/home')
+            that.$store.commit('login', {openId: openId, uid: uid, nickName: account, openShop: openShop, cookie: cookie, accesstoken: accesstoken, islogin: '1'})
+            that.$router.push('/')
           })
           .catch(function (error) {
             console.log(error)

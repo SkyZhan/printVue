@@ -3,9 +3,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 
-function storeLocalStore (state) {
-  window.localStorage.setItem('userMsg', JSON.stringify(state))
-}
+// function storeLocalStore (state) {
+//   window.localStorage.setItem('userMsg', JSON.stringify(state))
+// }
 export default new Vuex.Store({
   state: {
     openId: '',
@@ -13,21 +13,25 @@ export default new Vuex.Store({
     uid: '',
     openShop: '',
     cookie: '',
-    accesstoken: ''
+    accesstoken: '',
+    islogin: '0',
+    nickName: ''
   },
   mutations: {
     login (state, payload) {
       state.openId = payload.openId
       state.uid = payload.uid
+      state.nickName = payload.nickName
       state.openShop = payload.openShop
       state.cookie = payload.cookie
       state.accesstoken = payload.accesstoken
+      state.islogin = payload.islogin
       console.log('STATE' + state.accesstoken)
-      storeLocalStore(state)
+      // storeLocalStore(state)
     },
     submitForm (state, payload) {
       state.openShop = payload.openShop
-      storeLocalStore(state)
+      // storeLocalStore(state)
     }
   }
 

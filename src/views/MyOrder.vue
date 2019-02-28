@@ -1,7 +1,8 @@
 <template>
   <div>
     <Header></Header>
-    <el-tabs :tab-position="tabPosition" style="padding-top:10px;">
+    <h3 v-if="this.$store.state.islogin == '0'" @click="toLogin">请先登录！点击此处可登录</h3>
+    <el-tabs :tab-position="tabPosition" style="padding-top:10px;" v-else>
       <el-tab-pane label="未确认订单">
         <el-table
           :data="orderArray"
@@ -62,7 +63,7 @@
         <el-table
           :data="orderArray"
           style="width: 100%">
-          <el-table-column type="expand">
+          <el-table-column type="expand"  >
             <template slot-scope="props">
               <el-form label-position="left" inline class="demo-table-expand">
                 <el-form-item label="订单编号">
@@ -71,17 +72,17 @@
                 <el-form-item label="订单">
                   <span>{{ props.row.tag }}</span>
                 </el-form-item>
-                <el-form-item label="店铺名称">
+                <el-form-item label="店铺名称" >
                   <span>{{ props.row.name}}</span>
                 </el-form-item>
                 <el-form-item label="店铺地址">
                   <span>{{ props.row.locate }}</span>
                 </el-form-item>
-                <el-form-item label="店铺 ID">
+                <el-form-item label="店铺 ID" >
                   <span>{{ props.row.sid }}</span>
                 </el-form-item>
-                <el-form-item label="文件">
-                  <span v-for="(item, index) in props.row.fileList" :key="index"><a :href=" item.url">{{ item.name }}</a></span>
+                <el-form-item label="文件" >
+                  <span v-for="(item, index) in props.row.fileList" :key="index"><a @click="open(item.url)">{{ item.name }}</a></span>
                 </el-form-item>
                 <el-form-item label="文件打印要求">
                   <span>{{ props.row.requirement }}</span>
@@ -94,7 +95,7 @@
           </el-table-column>
           <el-table-column
             label="订单编号"
-            prop="oid">
+            prop="oid" >
           </el-table-column>
           <el-table-column
             label="店铺名称"
@@ -166,12 +167,18 @@ export default {
       })
   },
   methods: {
+    open (fileUrl) {
+      window.open(fileUrl)
+    },
     handleClick (tab, event) {
       console.log(tab, event)
     },
     // delete order
     handleDelete (index, row) {
       console.log(index, row)
+    },
+    toLogin () {
+      this.$router.push('/login')
     }
   }
 }

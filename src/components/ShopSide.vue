@@ -1,5 +1,5 @@
 <template>
-  <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+  <el-aside width="9rem" style="background-color: rgb(238, 241, 246);    overflow-x: hidden;">
       <el-menu
         :default-active="$route.path"
         class="el-menu-vertical-demo"
@@ -12,15 +12,15 @@
             <span slot="title">导航</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item :index="PersonalCenter" @click="toPersonalCenter">个人信息</el-menu-item>
+            <el-menu-item :index="PersonalCenter" @click="toPersonalCenter" style="min-width:0px;">个人信息</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group v-if="this.$store.state.openShop ==  '0'">
             <template slot="title">申请成为商家</template>
-            <el-menu-item :index="ApplyShop" @click="toApplyShop">申请商家</el-menu-item>
+            <el-menu-item :index="ApplyShop" @click="toApplyShop" style="min-width:0px;">申请商家</el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group title="我的商铺" v-else>
-            <el-menu-item index="MyShop" @click="toMyShop">店铺信息</el-menu-item>
-            <el-menu-item index="MyShopOrder" @click="toMyShopOrder">店铺订单</el-menu-item>
+            <el-menu-item index="MyShop" @click="toMyShop" style="min-width:0px;">店铺信息</el-menu-item>
+            <el-menu-item index="MyShopOrder" @click="toMyShopOrder" style="min-width:0px;">店铺订单</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
       </el-menu>
@@ -65,7 +65,8 @@ export default {
 
 <style scoped>
   .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
+    width: 9rem;
+    min-height: 10rem;
+    overflow-x: hidden;
   }
 </style>

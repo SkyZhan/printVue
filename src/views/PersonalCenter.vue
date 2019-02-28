@@ -1,15 +1,16 @@
 <template>
   <div>
     <Header></Header>
-    <el-container style="height: 100%;border: 1px solid #eee;">
+    <h3 v-if="this.$store.state.islogin == '0'" @click="toLogin">请先登录！点击此处可登录</h3>
+    <el-container style="height: 100%;border: 1px solid #eee;" v-else>
       <ShopSide></ShopSide>
       <el-container>
         <el-header style="text-align: right; font-size: 12px">
-          <span>{{form.nickName}}</span>
+          <span>{{this.$store.state.nickName}}</span>
         </el-header>
         <el-main>
           <input @change="uploadInputchange()"  id="uploadFileInput" type="file" accept="image/*" style="display: none">
-          <img  :src="form.headPic"  style="width:200px;border-radius: 50%;border: 2px solid #ddd;padding: 5px; background: #fff;" onclick="uploadFileInput.click()">
+          <img  :src="form.headPic"  style="width:8rem;border-radius: 50%;border: 2px solid #ddd;padding: 5px; background: #fff;" onclick="uploadFileInput.click()">
           <div v-if="changeResult">
             <p><span class="smallTitle">昵称：</span>{{form.nickName}}</p>
             <p><span class="smallTitle">性别：</span>{{form.sex}}</p>
@@ -92,6 +93,7 @@ export default {
         })
       this.changeResult = true
     },
+    // 更新头像
     Uploadpic (headPic) {
       let that = this
       console.log('uploadpic' + headPic)
@@ -163,6 +165,9 @@ export default {
             console.log(err)
           })
         })
+    },
+    toLogin () {
+      this.$router.push('/login')
     }
   }
 }
@@ -177,7 +182,7 @@ export default {
     font-weight: 800;
   }
   .el-header {
-    border:1px solid #B3C0D1;
+    background-color: #e0e8f3;
     color: #333;
     line-height: 60px;
   }

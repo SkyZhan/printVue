@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import qs from 'qs'
 export default {
   data () {
     return {
@@ -61,12 +62,13 @@ export default {
       let account = that.regForm.account
       let password = that.regForm.password
       if (account === '' || password === '') {
-        alert('账号或密码不能为空') // 'http://118.89.52.224:8999/api/user/register'
+        alert('账号或密码不能为空')
       } else {
         console.log(account + password)
         that.axios
           .post(that.$store.state.globalUrl + '/api/user/register?nickName=' + account + '&passwd=' + password)
           .then(function (response) {
+            // 用户信息存储到store.js
             let openId = response.data.data.openId
             let uid = response.data.data.uid
             let openShop = response.data.data.openShop
@@ -79,8 +81,20 @@ export default {
             document.cookie = cookie
             document.cookie = 'session=' + openId + '; ' + expires
             console.log(cookie)
-            that.$store.commit('login', {openId: openId, uid: uid, openShop: openShop, cookie: cookie, accesstoken: accesstoken})
-            that.$router.push('/home')
+            that.$store.commit('login', {openId: openId, uid: uid, nickName: account, openShop: openShop, cookie: cookie, accesstoken: accesstoken, islogin: '1'})
+            // 存储默认头像
+            let obj = {
+              headPic: 'https://pic.heartqiu.cn/5201902279804197.png'
+            }
+            that.axios
+              .post(that.$store.state.globalUrl + '/api/user/update-by-uid', qs.stringify(obj), {
+                headers: {'accesstoken': that.$store.state.accesstoken}
+              })
+              .then(function (response) {
+                console.log(response.data)
+              })
+            // 注册结束  跳转到首页
+            that.$router.push('/')
           })
           .catch(function (error) {
             console.log(error)
@@ -88,7 +102,7 @@ export default {
       }
     },
     toLogin () {
-      this.$router.push('/')
+      this.$router.push('/login')
     }
   }
 }

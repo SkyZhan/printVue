@@ -1,5 +1,5 @@
 <template>
-  <p class="wordtype">—  —  店铺示例  —  —</p>
+  <p class="wordtype">—  —  精选打印店铺  —  —</p>
 </template>
 
 <script>

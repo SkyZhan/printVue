@@ -1,7 +1,10 @@
 <template>
 <div class="contain">
   <el-row :gutter="10">
-    <el-col :xs="24" :md="5" v-for="item in shopList" :key="item.sid" style="padding-left: 0;
+    <el-col  :xs="24" :sm="6" :md="3" style="border: none;">
+      SKY
+    </el-col>
+    <el-col :xs="24" :sm="6" :md="4"  v-for="item in shopList.slice(0,3)" :key="item.sid" style="padding-left: 0;
     padding-right: 0;">
       <router-link :to="{name: 'ShopDetail', params: {id: item.sid }}">
         <img v-if="item.openUp == '1'" src="../assets/shopStatus/open.jpg" class="pic_style"/>
@@ -38,9 +41,6 @@ export default {
 </script>
 
 <style scoped>
-  .contain{
-    margin-left: 20%;
-  }
   .el-col {
     border-radius: 4px;
     border: 1px solid #dad2d2;
@@ -62,6 +62,6 @@ export default {
   }
   .pic_style {
     width:100%;
-    height: 120px;
+    height: 10rem;
   }
 </style>

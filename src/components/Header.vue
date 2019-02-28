@@ -18,7 +18,8 @@ export default {
         {name: '/', navItem: '首页'},
         {name: '/MySearch', navItem: '我的搜索'},
         {name: '/MyOrder', navItem: '我的订单'},
-        {name: '/personalCenter', navItem: '个人中心'}
+        {name: '/PersonalCenter', navItem: '个人中心'},
+        {name: '/PublicFile', navItem: '文件广场'}
       ]
     }
   }

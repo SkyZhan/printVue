@@ -4,6 +4,7 @@
     <Carous></Carous>
     <SaleNumber></SaleNumber>
     <ShopList></ShopList>
+    <Footer></Footer>
   </div>
 
 </template>
@@ -11,6 +12,7 @@
 <script>
 import ShopList from '@/components/ShopList'
 import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 import Carous from '@/components/Carous'
 import SaleNumber from '@/components/SaleNumber'
 export default {
@@ -18,7 +20,8 @@ export default {
     ShopList,
     Header,
     Carous,
-    SaleNumber
+    SaleNumber,
+    Footer
   },
   data () {
     return {

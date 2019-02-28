@@ -4,6 +4,7 @@
   <div class="container">
     <el-row :gutter="10">
       <el-col :xs="24" :md="4">⭐</el-col>
+      <br/>
       <el-col :xs="24" :md="9">
         <img v-if="list.openUp === '1'" src="../assets/shopStatus/open.jpg" class="pictype" alt="img"/>
         <img v-else src="../assets/shopStatus/open.jpg" class="pictype" alt="img"/>
@@ -37,8 +38,8 @@ export default {
   },
   mounted () {
     let that = this
-    if (that.id != null) { localStorage.setItem('newID', this.id) }
-    let newID = localStorage.getItem('newID')
+    // if (that.id != null) { localStorage.setItem('newID', this.id) }
+    let newID = this.id
     console.log(newID)
     that.axios
       .post(that.$store.state.globalUrl + '/api/shop/get-by-id?sid=' + newID)
@@ -69,7 +70,8 @@ export default {
     line-height: 160px;
   }
   .pictype{
-    border: 1px solid #E9EEF3;
+    padding-right: 0;
+    padding-left: 0;
   }
   .container{
     margin-top: 20px;
