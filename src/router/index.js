@@ -13,6 +13,9 @@ import MyShopOrder from '@/views/MyShopOrder'
 import MySearch from '@/views/MySearch'
 import MyOrder from '@/views/MyOrder'
 import PublicFile from '@/views/PublicFile'
+import AdminDefault from '@/views/Admin/AdminDefault'
+import AdminFileList from '@/views/Admin/AdminFileList'
+import AdminShopList from '@/views/Admin/AdminShopList'
 Vue.use(Router)
 
 export default new Router({
@@ -83,6 +86,21 @@ export default new Router({
       path: '/PublicFile',
       name: 'PublicFile',
       component: PublicFile
+    },
+    {
+      path: '/Admin/AdminDefault',
+      name: 'AdminDefault',
+      component: AdminDefault
+    },
+    {
+      path: '/Admin/AdminFileList',
+      name: 'AdminFileList',
+      component: AdminFileList
+    },
+    {
+      path: '/Admin/AdminShopList',
+      name: 'AdminShopList',
+      component: AdminShopList
     }
   ]
 })

@@ -1,25 +1,30 @@
 <template>
-  <div>
+  <div style="text-align: center;">
     <Header></Header>
-    <el-row :gutter="10">
-        <el-col :span="22" :offset="1">
-        <el-button type="text"  @click="isDialogFormVisible">上传公共文件</el-button>
-        </el-col>
-    </el-row>
+    <el-button type="text"  @click="isDialogFormVisible">上传公共文件</el-button>
+    <el-alert
+      title="点击上传文件即可上传共享文件，点击文件名字即可下载所需文件"
+      type="success"
+      center>
+    </el-alert>
     <el-table
+      ref="filterTable"
       :data="filesArray"
       style="width: 100%">
       <el-table-column
         label="日期"
-        width="180">
+        width="180"
+        prop="date"
+        :filters="dateArray"
+        :filter-method="filterTag"
+        filter-placement="bottom-end">
         <template slot-scope="scope">
-          <i class="el-icon-time"></i>
           <span style="margin-left: 10px">{{ scope.row.date }}</span>
         </template>
       </el-table-column>
       <el-table-column
         label="文件"
-        width="180">
+        width="350">
         <template slot-scope="scope">
           <span style="margin-left: 10px" v-for="(item, index) in scope.row.files" :key="index">
             <a  target="_blank" @click="open(item.url)">{{item.name}}</a>
@@ -93,7 +98,8 @@ export default {
       dialogFormVisible: false,
       formLabelWidth: '120px',
       fileList: [],
-      filesArray: []
+      filesArray: [],
+      dateArray: []
     }
   },
   mounted () {
@@ -103,8 +109,8 @@ export default {
       .then(function (response) {
         console.log(response.data.data)
         let objArray = response.data.data
-        let fileArray = []
         for (let i = 0; i < objArray.length; i++) {
+          let fileArray = []
           console.log(objArray[i])
           let fileNameList = (objArray[i].fileName || '').split(' ') // split use in vue
           let fileUrlList = (objArray[i].fileUrl || '').split(' ') // split use in vue
@@ -115,19 +121,27 @@ export default {
             fileArray.push(obj)
           }
           console.log(fileArray)
-          let order = {}
-          order.name = objArray[i].nickName
-          order.files = fileArray
-          order.date = objArray[i].uploadTime
-          that.filesArray.push(order)
-          fileArray = []
-          order = {}
+          let file = {}
+          file.fid = objArray[i].fid
+          file.name = objArray[i].nickName
+          file.files = fileArray
+          file.date = objArray[i].uploadTime
+          that.filesArray.push(file)
+          // 日期排序 ，筛选日期 ，过滤器
+          let date = {}
+          date.value = objArray[i].uploadTime
+          date.text = objArray[i].uploadTime
+          that.dateArray.push(date)
         }
       })
   },
   methods: {
     open (fileUrl) {
       window.open(fileUrl)
+    },
+    filterTag (value, row) {
+      console.log(row)
+      return row.date === value
     },
     UploadComplete (val) {
       console.log(val)

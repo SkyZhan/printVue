@@ -12,8 +12,11 @@
             <span slot="title">导航</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item :index="PersonalCenter" @click="toPersonalCenter" style="min-width:0px;">个人信息</el-menu-item>
-          </el-menu-item-group>
+          <el-menu-item :index="PersonalCenter" @click="toPersonalCenter" style="min-width:0px;">个人信息</el-menu-item>
+        </el-menu-item-group>
+          <!--<el-menu-item-group>-->
+            <!--<el-menu-item :index="MyFile" @click="toMyFile" style="min-width:0px;">我的文件</el-menu-item>-->
+          <!--</el-menu-item-group>-->
           <el-menu-item-group v-if="this.$store.state.openShop ==  '0'">
             <template slot="title">申请成为商家</template>
             <el-menu-item :index="ApplyShop" @click="toApplyShop" style="min-width:0px;">申请商家</el-menu-item>
@@ -36,6 +39,7 @@ export default {
       PersonalCenter: '/PersonalCenter',
       MyShop: '/MyShop',
       MyShopOrder: '/MyShopOrder',
+      // MyFile: '/MyFile',
       isCollapse: false
     }
   },
@@ -58,6 +62,9 @@ export default {
     toMyShopOrder () {
       this.$router.push('/MyShopOrder')
     }
+    // toMyFile () {
+    //   this.$router.push('/MyFile')
+    // }
 
   }
 }

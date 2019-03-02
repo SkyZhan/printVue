@@ -66,7 +66,11 @@ export default {
             document.cookie = 'session=' + openId + '; ' + expires
             console.log(cookie)
             that.$store.commit('login', {openId: openId, uid: uid, nickName: account, openShop: openShop, cookie: cookie, accesstoken: accesstoken, islogin: '1'})
-            that.$router.push('/')
+            if (response.data.data.admin) {
+              that.$router.push('/admin/admindefault')
+            } else {
+              that.$router.push('/')
+            }
           })
           .catch(function (error) {
             console.log(error)
