@@ -1,5 +1,5 @@
 <template>
-  <el-aside width="9rem" style="background-color: rgb(238, 241, 246);    overflow-x: hidden;">
+  <el-aside width="11rem" style="background-color: rgb(238, 241, 246);height:45rem;overflow-x: hidden;border:none">
       <el-menu
         :default-active="$route.path"
         class="el-menu-vertical-demo"
@@ -72,8 +72,7 @@ export default {
 
 <style scoped>
   .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 9rem;
-    min-height: 10rem;
+    width: 11rem;
     overflow-x: hidden;
   }
 </style>

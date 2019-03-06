@@ -6,8 +6,13 @@
   </div>
   <el-row :gutter="10">
     <el-col :xs="24" :md="8">
-      <h3>位置：下单状态</h3>
-      <h3>{{this.$route.params.shopName}}</h3>
+      ✨
+    </el-col>
+    <el-col :xs="24" :md="8">
+      <div style="text-align: left;padding-left: 1rem">
+        <h4>位置：下单页面</h4>
+        <h4>打印店：{{this.$route.params.shopName}}</h4>
+      </div>
       <el-form :label-position="labelPosition" label-width="80px" :model="form">
         <el-form-item label="收货人">
           <el-input v-model="form.name"></el-input>
@@ -110,6 +115,12 @@ export default {
         )
         .then(function (response) {
           console.log(response.data)
+          this.$message({
+            showClose: true,
+            message: '订单上传成功',
+            type: 'success'
+          })
+          that.$router.push('/MyOrder')
         })
       console.log('submit!' + thetag + fileUrl)
     },

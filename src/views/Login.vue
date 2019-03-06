@@ -48,9 +48,7 @@ export default {
       } else {
         console.log(account + password)
         this.axios
-          .post(that.$store.state.globalUrl + '/api/user/login?account=' + account + '&passwd=' + password, {}, {
-            headers: {'accesstoken': '5-7762e39c640684ab8ec8c1cd6a45480f'}
-          })
+          .post(that.$store.state.globalUrl + '/api/user/login?account=' + account + '&passwd=' + password)
           .then(function (response) {
             console.log(response.data.data)
             let openId = response.data.data.openId

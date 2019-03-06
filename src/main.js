@@ -14,9 +14,9 @@ Vue.use(Validator)
 Vue.use(VueAxios, axios)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
-
-axios.defaults.headers.post['accesstoken'] = '5-7762e39c640684ab8ec8c1cd6a45480f'
-axios.defaults.headers.get['accesstoken'] = '5-7762e39c640684ab8ec8c1cd6a45480f'
+//
+// axios.defaults.headers.post['accesstoken'] = '5-7762e39c640684ab8ec8c1cd6a45480f'
+// axios.defaults.headers.get['accesstoken'] = '5-7762e39c640684ab8ec8c1cd6a45480f'
 
 /* eslint-disable no-new */
 new Vue({

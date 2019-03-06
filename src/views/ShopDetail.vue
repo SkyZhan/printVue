@@ -55,8 +55,16 @@ export default {
   },
   methods: {
     makeOrder () {
-      console.log(this.list.sid)
-      this.$router.push({name: 'MakeOrder', params: {shopName: this.list.name, shopId: this.list.sid}})
+      if (this.$store.state.islogin === '1') {
+        console.log(this.list.sid)
+        this.$router.push({name: 'MakeOrder', params: {shopName: this.list.name, shopId: this.list.sid}})
+      } else {
+        this.$message({
+          showClose: true,
+          message: '请先登录',
+          type: 'warning'
+        })
+      }
     }
   }
 }

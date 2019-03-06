@@ -4,7 +4,7 @@
     <div style="margin-top: 1rem;">
       <span>搜索</span>
       <el-select
-        v-model="selectvalue"
+        v-model="selectValue"
         multiple
         filterable
         allow-create
@@ -18,22 +18,33 @@
           :value="item">
         </el-option>
       </el-select>
-      <el-button type="primary" @click="search">搜索</el-button>
+      <el-button slot="append" type="primary" plain icon="el-icon-search" @click="search"></el-button>
     </div>
+    <el-alert
+      title="选择标签即可搜索所需的店铺"
+      type="success"
+      center>
+    </el-alert>
     <!--商店信息-->
     <div>
       <el-row :gutter="10">
-        <el-col  :xs="24" :sm="6" :md="3" style="border: none;">
+        <el-col  :xs="24" :sm="6" :md="4" style="border: none;">
           ✨
         </el-col>
-        <el-col :xs="24" :sm="6" :md="4"  v-for="item in shopList.slice(0,3)" :key="item.sid" style="padding-left: 0;
-    padding-right: 0;margin-top:1rem">
-          <router-link :to="{name: 'ShopDetail', params: {id: item.sid }}">
-            <img v-if="item.openUp == '1'" src="../assets/shopStatus/open.jpg" class="pic_style"/>
-            <img v-else src="../assets/shopStatus/close.jpg" class="pic_style"/>
-            <el-main>{{item.name}}</el-main>
-            <el-footer>{{item.region}}楼{{item.roomNumber}}</el-footer>
-          </router-link>
+        <el-col :xs="24" :sm="6" :md="14" style="border: none;">
+           <el-row :gutter="10" v-if="shopListShow.length > 0">
+             <el-col :xs="24" :sm="6" :md="6"  v-for="item in shopListShow" :key="item.sid" style="padding-left: 0;
+      padding-right: 0;margin-top:1rem">
+               <router-link :to="{name: 'ShopDetail', params: {id: item.sid }}">
+                 <img v-if="item.openUp === 1" src="../assets/shopStatus/open.jpg" class="pic_style"/>
+                 <img v-else src="../assets/shopStatus/close.jpg" class="pic_style"/>
+                 <el-main>{{item.name}}</el-main>
+                 <el-footer>{{item.region}}楼{{item.roomNumber}}</el-footer>
+                 <p style="margin-top: -2rem;color: black;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{item.tag}}</p>
+               </router-link>
+             </el-col>
+           </el-row>
+            <div style="color:#8a8888;margin-top:2rem" v-else>暂无符合店铺</div>
         </el-col>
       </el-row>
     </div>
@@ -48,10 +59,13 @@ export default {
   },
   data () {
     return {
-      selectvalue: [],
+      selectValue: [],
       options: [],
-      shopList: []
+      shopListShow: [],
+      shopListSource: []
     }
+  },
+  computed: {
   },
   mounted () {
     let that = this
@@ -62,19 +76,36 @@ export default {
         for (let i = 0; i < tagType.length; i++) {
           that.options.push(tagType[i].tagName)
         }
-        that.options.push('东区')
-        that.options.push('西区')
       })
     that.axios
       .get(that.$store.state.globalUrl + '/api/shop/index')
-      .then(response => (
-        // console.log(response.data.data)
-        that.shopList = response.data.data
-      ))
+      .then(function (response) {
+        that.shopListSource = response.data.data
+        that.shopListShow = that.shopListSource
+      })
   },
   methods: {
     search () {
-      console.log(this.selectvalue)
+      console.log('here')
+      let shops = this.shopListSource
+      let resultSet = new Set()
+      let filterKeys = this.selectValue
+      for (let i = 0; i < filterKeys.length; i++) {
+        let key = filterKeys[i]
+        for (let j = 0; j < shops.length; j++) {
+          let shop = shops[j]
+          if (shop.tag.indexOf(key) > -1) {
+            resultSet.add(shop)
+          }
+        }
+      }
+      let resultList = []
+      let shop = {}
+      for (shop of resultSet) {
+        resultList.push(shop)
+      }
+      console.log(resultList)
+      this.shopListShow = resultList
     }
   }
 }

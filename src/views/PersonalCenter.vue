@@ -2,15 +2,20 @@
   <div>
     <Header></Header>
     <h3 v-if="this.$store.state.islogin == '0'" @click="toLogin">请先登录！点击此处可登录</h3>
-    <el-container style="height: 100%;border: 1px solid #eee;" v-else>
+    <el-container style="height: 100%;border: none" v-else>
       <ShopSide></ShopSide>
-      <el-container>
+      <el-container style="border: none">
         <el-header style="text-align: right; font-size: 12px">
           <span>{{this.$store.state.nickName}}</span>
         </el-header>
         <el-main>
+          <el-alert
+            title="点击图片更新头像"
+            type="success"
+            center>
+          </el-alert>
           <input @change="uploadInputchange()"  id="uploadFileInput" type="file" accept="image/*" style="display: none">
-          <img  :src="form.headPic"  style="width:8rem;border-radius: 50%;border: 2px solid #ddd;padding: 5px; background: #fff;" onclick="uploadFileInput.click()">
+          <img  :src="form.headPic"  style="width:6rem;border-radius: 50%;border: 2px solid #ddd;margin-left:4rem;padding: 5px; background: #fff;" onclick="uploadFileInput.click()">
           <div v-if="changeResult">
             <p><span class="smallTitle">昵称：</span>{{form.nickName}}</p>
             <p><span class="smallTitle">性别：</span>{{form.sex}}</p>
@@ -19,6 +24,7 @@
             <p class="changeInfo" @click="changDetail">修改个人信息</p>
           </div>
           <div v-else>
+            <p class="changeInfo" @click="backDetail">返回个人信息</p>
             <el-form ref="form" :model="form" label-width="80px">
               <el-form-item label="昵称">
                 <el-input v-model="form.nickName" value="form.nickName" :disabled="true"></el-input>
@@ -80,6 +86,9 @@ export default {
   methods: {
     changDetail () {
       this.changeResult = false
+    },
+    backDetail () {
+      this.changeResult = true
     },
     submitDetail () {
       let that = this
@@ -176,7 +185,7 @@ export default {
 <style scoped>
   .changeInfo {
     color: #1b81ea;
-    font-size:16px;
+    font-size:14px;
   }
   .smallTitle {
     font-weight: 800;

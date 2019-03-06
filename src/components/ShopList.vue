@@ -2,7 +2,7 @@
 <div class="contain">
   <el-row :gutter="10">
     <el-col  :xs="24" :sm="6" :md="3" style="border: none;">
-      SKY
+      ✨
     </el-col>
     <el-col :xs="24" :sm="6" :md="4"  v-for="item in shopList.slice(0,3)" :key="item.sid" style="padding-left: 0;
     padding-right: 0;">

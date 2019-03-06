@@ -1,6 +1,6 @@
 <template>
   <el-carousel indicator-position="outside">
-    <el-carousel-item v-for="item in 4" :key="item">
+    <el-carousel-item v-for="item in 2" :key="item">
       <h3>{{ item }}</h3>
     </el-carousel-item>
   </el-carousel>
@@ -28,10 +28,15 @@ export default {
   }
 
   .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
+    /*background-color: #99a9bf;*/
+    background:url('../assets/2.jpg');
+    -moz-background-size:100% 100%;
+    background-size:100% 100%;
   }
 
   .el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
+    background:url('../assets/1.jpg');
+    -moz-background-size:100% 100%;
+    background-size:100% 100%;
   }
 </style>

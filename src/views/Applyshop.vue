@@ -3,7 +3,7 @@
     <Header></Header>
       <el-container style="height: 100%;border: 1px solid #eee;">
         <ShopSide></ShopSide>
-        <el-container>
+        <el-container style="border:none;">
           <el-header style="text-align: right; font-size: 12px">
             <span>{{nickName}}</span>
           </el-header>
