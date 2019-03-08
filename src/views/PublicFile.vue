@@ -105,7 +105,9 @@ export default {
   mounted () {
     let that = this
     that.axios
-      .post(that.$store.state.globalUrl + '/api/file/get')
+      .post(that.$store.state.globalUrl + '/api/file/get', {}, {
+        headers: {'accesstoken': this.$store.state.accesstoken}
+      })
       .then(function (response) {
         console.log(response.data.data)
         let objArray = response.data.data
