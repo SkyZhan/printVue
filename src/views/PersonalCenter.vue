@@ -14,38 +14,57 @@
             type="success"
             center>
           </el-alert>
-          <input @change="uploadInputchange()"  id="uploadFileInput" type="file" accept="image/*" style="display: none">
-          <img  :src="form.headPic"  style="width:6rem;border-radius: 50%;border: 2px solid #ddd;margin-left:4rem;padding: 5px; background: #fff;" onclick="uploadFileInput.click()">
-          <div v-if="changeResult">
-            <p><span class="smallTitle">昵称：</span>{{form.nickName}}</p>
-            <p><span class="smallTitle">性别：</span>{{form.sex}}</p>
-            <p><span class="smallTitle">电话号码：</span>{{form.telNum}}</p>
-            <p><span class="smallTitle">微信号：</span>{{form.wechat}}</p>
-            <p class="changeInfo" @click="changDetail">修改个人信息</p>
-          </div>
-          <div v-else>
-            <p class="changeInfo" @click="backDetail">返回个人信息</p>
-            <el-form ref="form" :model="form" label-width="80px">
-              <el-form-item label="昵称">
-                <el-input v-model="form.nickName" value="form.nickName" :disabled="true"></el-input>
-              </el-form-item>
-              <el-form-item label="性别">
-                <el-radio-group v-model="form.sex">
-                  <el-radio label="男" ></el-radio>
-                  <el-radio label="女" ></el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="电话号码">
-                <el-input v-model="form.telNum"></el-input>
-              </el-form-item>
-              <el-form-item label="微信">
-                <el-input v-model="form.wechat"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="submitDetail()" plain>确认修改</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
+          <el-row :gutter="10">
+            <el-col :xs="24" :md="6">
+              ✨
+            </el-col>
+            <el-col :xs="24" :md="12">
+              <input @change="uploadInputchange()"  id="uploadFileInput" type="file" accept="image/*" style="display: none">
+              <img  :src="form.headPic"  style="width:6rem;height:6rem;border-radius: 50%;border: 2px solid #ddd;margin-left:8rem;margin-bottom:2rem;padding: 5px; background: #fff;" onclick="uploadFileInput.click()">
+              <div v-if="changeResult">
+                <el-form style="margin-left: 3rem" ref="form" :model="form" :rules="rules" label-width="80px">
+                  <el-form-item label="昵称">
+                    {{form.nickName}}
+                  </el-form-item>
+                  <el-form-item label="性别">
+                    {{form.sex}}
+                  </el-form-item>
+                  <el-form-item label="电话号码" prop="telNum">
+                    {{form.telNum}}
+                  </el-form-item>
+                  <el-form-item label="微信">
+                    {{form.wechat}}
+                  </el-form-item>
+                  <el-form-item>
+                    <p class="changeInfo" @click="changDetail">修改个人信息</p>
+                  </el-form-item>
+                </el-form>
+              </div>
+              <div v-else>
+                <p class="changeInfo" @click="backDetail">返回个人信息</p>
+                <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                  <el-form-item label="昵称">
+                    <el-input v-model="form.nickName" value="form.nickName" :disabled="true"></el-input>
+                  </el-form-item>
+                  <el-form-item label="性别">
+                    <el-radio-group v-model="form.sex">
+                      <el-radio label="男" ></el-radio>
+                      <el-radio label="女" ></el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                  <el-form-item label="电话号码" prop="telNum">
+                    <el-input v-model="form.telNum"></el-input>
+                  </el-form-item>
+                  <el-form-item label="微信">
+                    <el-input v-model="form.wechat"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="submitDetail()" plain>确认修改</el-button>
+                  </el-form-item>
+                </el-form>
+              </div>
+            </el-col>
+          </el-row>
         </el-main>
       </el-container>
     </el-container>
@@ -72,6 +91,22 @@ export default {
         telNum: '',
         wechat: '',
         passwd: ''
+      },
+      rules: {
+        telNum: [{validator: (rule, value, callback) => {
+          if (!value) {
+            callback(new Error('手机号不能为空'))
+          } else {
+            const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+            console.log(reg.test(value))
+            if (reg.test(value)) {
+              callback()
+            } else {
+              callback(new Error('请输入正确的手机号'))
+            }
+          }
+        },
+        trigger: 'blur'}]
       }
     }
   },
@@ -149,7 +184,7 @@ export default {
       let filename = that.getUploadName(file)
       console.log('filename' + filename)
       this.axios
-        .get(this.$store.state.globalUrl + '/qiniu/upload-with-pic-name?picName=' + filename, {}, {
+        .post(this.$store.state.globalUrl + '/qiniu/upload-with-pic-name?picName=' + filename, {picName: filename}, {
           headers: {'accesstoken': this.$store.state.accesstoken}
         })
         .then(function (response) {

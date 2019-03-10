@@ -146,8 +146,6 @@ export default {
       this.changeType = true
     },
     ChangeInfo () {
-      this.array = this.ruleForm.tag.split(' ')
-      console.log(this.array)
       this.changeType = false
     },
     // 开关店控制

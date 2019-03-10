@@ -32,7 +32,7 @@
                   <span>{{ props.row.requirement }}</span>
                 </el-form-item>
                 <el-form-item label="订单状态">
-                  <span>{{ props.row.status }}</span>
+                  <span>等待确认</span>
                 </el-form-item>
               </el-form>
             </template>
@@ -80,7 +80,7 @@
                   <span>{{ props.row.requirement }}</span>
                 </el-form-item>
                 <el-form-item label="订单状态">
-                  <span>{{ props.row.status }}</span>
+                  <span>已经确认</span>
                 </el-form-item>
               </el-form>
             </template>

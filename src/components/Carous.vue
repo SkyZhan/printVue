@@ -1,7 +1,7 @@
 <template>
   <el-carousel indicator-position="outside">
-    <el-carousel-item v-for="item in 2" :key="item">
-      <h3>{{ item }}</h3>
+    <el-carousel-item v-for="item in 1" :key="item">
+      <h3></h3>
     </el-carousel-item>
   </el-carousel>
 </template>
@@ -29,13 +29,13 @@ export default {
 
   .el-carousel__item:nth-child(2n) {
     /*background-color: #99a9bf;*/
-    background:url('../assets/2.jpg');
+    background:url('../assets/platform.jpg');
     -moz-background-size:100% 100%;
     background-size:100% 100%;
   }
 
   .el-carousel__item:nth-child(2n+1) {
-    background:url('../assets/1.jpg');
+    background:url('../assets/platform.jpg');
     -moz-background-size:100% 100%;
     background-size:100% 100%;
   }

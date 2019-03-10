@@ -38,7 +38,22 @@ export default {
       },
       regRules: {
         account: [{required: true, message: '用户名不能为空', trigger: 'blur'},
-          {min: 3, max: 12, message: '长度在3到12个字符之间', trigger: 'blur'}],
+          {min: 3, max: 12, message: '长度在3到12个字符之间', trigger: 'blur'},
+          {validator: (rule, value, callback) => {
+            if (value === '') {
+              callback(new Error('please entrance'))
+            } else {
+              this.axios
+                .post(this.$store.state.globalUrl + '/api/user/register?nickName=' + value)
+                .then(function (response) {
+                  if (response.data.code === 10001) {
+                    callback(new Error(response.data.desc))
+                  }
+                })
+            }
+          },
+          trigger: 'blur'
+          }],
         password: [{required: true, message: '密码不能为空', trigger: 'blur'},
           {min: 6, max: 16, message: '长度在6到16个字符之间', trigger: 'blur'}],
         repeat: [{required: true, message: '确认密码要一致', trigger: 'blur'},

@@ -13,17 +13,17 @@
         <h4>位置：下单页面</h4>
         <h4>打印店：{{this.$route.params.shopName}}</h4>
       </div>
-      <el-form :label-position="labelPosition" label-width="80px" :model="form">
-        <el-form-item label="收货人">
+      <el-form :label-position="labelPosition" :rules="rules" label-width="80px" :model="form">
+        <el-form-item label="收货人" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="是否自提" >
+        <el-form-item label="是否自提">
           <label v-for="(item, index) in deliveryType" v-bind:key="index"><input :label="item" type="radio" :value="item" :key="index" @click="CouldDelivery" v-model="delivery" >{{item}}   </label>
         </el-form-item>
         <el-form-item label="送货地址" v-if="isDelivery">
           <el-input v-model="form.region"></el-input>
         </el-form-item>
-        <el-form-item label="手机号码" v-if="isDelivery">
+        <el-form-item label="手机号码" v-if="isDelivery" prop="phoneNumber">
           <el-input v-model="form.phoneNumber"></el-input>
         </el-form-item>
         <el-form-item label="打印文件">
@@ -36,7 +36,7 @@
             </li>
           </ul>
         </el-form-item>
-        <el-form-item label="打印要求">
+        <el-form-item label="打印要求" prop="requirement">
           <el-input type="textarea" v-model="form.requirement"></el-input>
         </el-form-item>
         <el-form-item size="large">
@@ -72,6 +72,24 @@ export default {
         phoneNumber: '',
         region: '',
         requirement: ''
+      },
+      rules: {
+        name: [{required: true, message: '用户名不能为空', trigger: 'blur'}],
+        phoneNumber: [{validator: (rule, value, callback) => {
+          if (!value) {
+            callback(new Error('手机号不能为空'))
+          } else {
+            const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+            console.log(reg.test(value))
+            if (reg.test(value)) {
+              callback()
+            } else {
+              callback(new Error('请输入正确的手机号'))
+            }
+          }
+        },
+        trigger: 'blur'}],
+        requirement: [{required: true, message: '打印要求不可以为空', trigger: 'blur'}]
       }
     }
   },
@@ -100,7 +118,7 @@ export default {
         fileName = fileName + that.fileList[i].name + ' '
         fileUrl = fileUrl + that.fileList[i].url + ' '
       }
-      let thetag = that.delivery + '-' + that.form.name + '-' + that.form.phoneNumber + '-' + that.form.region
+      let thetag = that.delivery + ' ' + that.form.name + ' ' + that.form.phoneNumber + ' ' + that.form.region
       let obj = {
         sid: that.$route.params.shopId,
         fileName: fileName,
@@ -178,7 +196,7 @@ export default {
       let filename = that.getUploadName(file)
       console.log('filename' + filename)
       this.axios
-        .get(this.$store.state.globalUrl + '/qiniu/upload-with-pic-name?picName=' + filename, {}, {
+        .post(this.$store.state.globalUrl + '/qiniu/upload-with-pic-name?picName=' + filename, {picName: filename}, {
           headers: {'accesstoken': this.$store.state.accesstoken}
         })
         .then(function (response) {

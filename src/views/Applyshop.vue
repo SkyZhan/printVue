@@ -54,7 +54,6 @@ export default {
     return {
       nickName: '',
       tagNum: [],
-      tagType: [],
       ruleForm: {
         name: '',
         region: '',
@@ -90,13 +89,11 @@ export default {
     that.axios
       .get(that.$store.state.globalUrl + '/api/tag/get ')
       .then(function (response) {
-        that.tagType = response.data.data
-        console.log(that.tagType)
+        let tagType = response.data.data
+        console.log(tagType)
         let array = []
-        for (let i = 0; i < that.tagType.length; i++) {
-          // that.tagNum[i] = that.tagType[i].tagName
-          array.push(that.tagType[i].tagName)
-          // console.log(that.tagType[i].tagName)
+        for (let i = 0; i < tagType.length; i++) {
+          array.push(tagType[i].tagName)
         }
         that.tagNum = array
       })
@@ -119,8 +116,8 @@ export default {
           message: '添加tag' + value
         })
         that.axios
-          .post(that.$store.state.globalUrl + '/api/tag/create?tagName=' + value, {
-            header: {'accesstoken': that.$store.state.accesstoken}
+          .post(that.$store.state.globalUrl + '/api/tag/create?tagName=' + value, {}, {
+            headers: {'accesstoken': that.$store.state.accesstoken}
           })
           .then(function (response) {
             console.log(response.data.desc)
@@ -178,7 +175,7 @@ export default {
 
 <style scoped>
   .el-header {
-    border:1px solid #B3C0D1;
+    background-color: #e0e8f3;
     color: #333;
     line-height: 60px;
   }

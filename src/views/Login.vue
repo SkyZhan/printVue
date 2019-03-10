@@ -50,24 +50,36 @@ export default {
         this.axios
           .post(that.$store.state.globalUrl + '/api/user/login?account=' + account + '&passwd=' + password)
           .then(function (response) {
-            console.log(response.data.data)
-            let openId = response.data.data.openId
-            let uid = response.data.data.uid
-            let openShop = response.data.data.openShop
-            let accesstoken = uid + '-' + openId
-            // 设置cookie
-            let exdate = new Date()
-            exdate.setTime(exdate.getTime() + (365 * 24 * 60 * 1000))
-            let expires = 'expires=' + exdate.toUTCString()
-            let cookie = 'uid=' + uid + '; ' + expires
-            document.cookie = cookie
-            document.cookie = 'session=' + openId + '; ' + expires
-            console.log(cookie)
-            that.$store.commit('login', {openId: openId, uid: uid, nickName: account, openShop: openShop, cookie: cookie, accesstoken: accesstoken, islogin: '1'})
-            if (response.data.data.admin) {
-              that.$router.push('/admin/admindefault')
-            } else {
-              that.$router.push('/')
+            if (response.data.code === 200) {
+              let openId = response.data.data.openId
+              let uid = response.data.data.uid
+              let openShop = response.data.data.openShop
+              let accesstoken = uid + '-' + openId
+              // 设置cookie
+              let exdate = new Date()
+              exdate.setTime(exdate.getTime() + (365 * 24 * 60 * 1000))
+              let expires = 'expires=' + exdate.toUTCString()
+              let cookie = 'uid=' + uid + '; ' + expires
+              document.cookie = cookie
+              document.cookie = 'session=' + openId + '; ' + expires
+              console.log(cookie)
+              that.$store.commit('login', {
+                openId: openId,
+                uid: uid,
+                nickName: account,
+                openShop: openShop,
+                cookie: cookie,
+                accesstoken: accesstoken,
+                islogin: '1'
+              })
+              if (response.data.data.admin) {
+                that.$router.push('/admin/admindefault')
+              } else {
+                that.$router.push('/')
+              }
+            }
+            if (response.data.code === 10003) {
+              that.$message.error(response.data.desc)
             }
           })
           .catch(function (error) {

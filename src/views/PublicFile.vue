@@ -2,67 +2,50 @@
   <div style="text-align: center;">
     <Header></Header>
     <el-button type="text"  @click="isDialogFormVisible">上传公共文件</el-button>
-    <el-alert
-      title="点击上传文件即可上传共享文件，点击文件名字即可下载所需文件"
-      type="success"
-      center>
-    </el-alert>
-    <el-table
-      ref="filterTable"
-      :data="filesArray"
-      style="width: 100%">
-      <el-table-column
-        label="日期"
-        width="180"
-        prop="date"
-        :filters="dateArray"
-        :filter-method="filterTag"
-        filter-placement="bottom-end">
-        <template slot-scope="scope">
-          <span style="margin-left: 10px">{{ scope.row.date }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="文件"
-        width="350">
-        <template slot-scope="scope">
-          <span style="margin-left: 10px" v-for="(item, index) in scope.row.files" :key="index">
-            <a  target="_blank" @click="open(item.url)">{{item.name}}</a>
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="贡献者"
-        width="180">
-        <template slot-scope="scope">
-          <span style="margin-left: 10px">{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!--<el-row :gutter="10">-->
-      <!--<el-col :span="22" :offset="1">-->
-        <!--<el-button type="text"  @click="isDialogFormVisible">上传公共文件</el-button>-->
-      <!--</el-col>-->
-      <!--<div v-for="(item, index) in filesArray" :key="index">-->
-        <!--<el-col :span="22" :offset="1">-->
-          <!--<div class="grid-content bg-purple" style="border: 1px solid #dcdfe6;text-align: left;">-->
-            <!--<span style="padding: 0.5rem;font-size: 1.2rem;">{{item.name}}</span>-->
-          <!--</div>-->
-        <!--</el-col>-->
-        <!--<el-col :span="22" :offset="1" style="margin-bottom: 1rem">-->
-          <!--<div class="grid-content bg-purple" style="border: 1px solid #dcdfe6;text-align: left;">-->
-            <!--<el-form>-->
-              <!--<el-form-item label="文件">-->
-                <!--<span v-for="(file, index) in item.files" :key="index"><a :href=" file.url">{{ file.name }}</a></span>-->
-              <!--</el-form-item>-->
-              <!--<el-form-item label="上传日期">-->
-                <!--<label>2018-8-7</label>-->
-              <!--</el-form-item>-->
-            <!--</el-form>-->
-          <!--</div>-->
-        <!--</el-col>-->
-      <!--</div>-->
-  <!--</el-row>-->
+    <el-row :gutter="10">
+      <el-col :xs="24" :md="7">
+        ✨
+      </el-col>
+      <el-col :xs="24" :md="12">
+        <el-alert
+          title="点击上传文件即可上传共享文件，点击文件名字即可下载所需文件"
+          type="success"
+          center>
+        </el-alert>
+        <el-table
+          ref="filterTable"
+          :data="filesArray"
+          style="width: 100%">
+          <el-table-column
+            label="日期"
+            width="180"
+            prop="date"
+            :filters="dateArray"
+            :filter-method="filterTag"
+            filter-placement="bottom-end">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.date }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="文件"
+            width="350">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px" v-for="(item, index) in scope.row.files" :key="index">
+                <a  target="_blank" @click="open(item.url)">{{item.name}}</a>
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="贡献者"
+            width="180">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
     <!--上传公共文件弹窗-->
     <el-dialog title="文件广场" :visible.sync="dialogFormVisible">
       <el-form>
@@ -231,7 +214,7 @@ export default {
       let filename = that.getUploadName(file)
       console.log('filename' + filename)
       this.axios
-        .get(this.$store.state.globalUrl + '/qiniu/upload-with-pic-name?picName=' + filename, {}, {
+        .post(this.$store.state.globalUrl + '/qiniu/upload-with-pic-name?picName=' + filename, {picName: filename}, {
           headers: {'accesstoken': this.$store.state.accesstoken}
         })
         .then(function (response) {
