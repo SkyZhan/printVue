@@ -124,12 +124,13 @@ export default {
       })
       .then(function (response) {
         let objArray = response.data.data
+        console.log(response.data.data)
         for (let i = 0; i < objArray.length; i++) {
           let fileArray = []
           let fileNameList = (objArray[i].fileName || '').split(' ') // split use in vue
           let fileUrlList = (objArray[i].fileUrl || '').split(' ') // split use in vue
           let obj = {}
-          for (let j = 0; j < fileNameList.length; j++) {
+          for (let j = 0; j < fileNameList.length - 1; j++) {
             obj.name = fileNameList[j]
             obj.url = fileUrlList[j]
             fileArray.push(obj)

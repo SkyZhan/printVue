@@ -132,8 +132,8 @@ export default {
           {headers: {'accesstoken': that.$store.state.accesstoken}}
         )
         .then(function (response) {
-          console.log(response.data)
-          this.$message({
+          console.log(response.data.desc)
+          that.$message({
             showClose: true,
             message: '订单上传成功',
             type: 'success'

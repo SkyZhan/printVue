@@ -40,7 +40,7 @@
             label="贡献者"
             width="180">
             <template slot-scope="scope">
-              <span style="margin-left: 10px">{{ scope.row.name }}</span>
+              <span style="margin-left: 10px">{{ scope.row.nickName }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -108,7 +108,7 @@ export default {
           console.log(fileArray)
           let file = {}
           file.fid = objArray[i].fid
-          file.name = objArray[i].nickName
+          file.nickName = objArray[i].nickName
           file.files = fileArray
           file.date = objArray[i].uploadTime
           that.filesArray.push(file)
@@ -233,11 +233,19 @@ export default {
           }).then(data => {
             console.log(data)
             document.getElementById('uploadFileInput').value = '' // 上传成功，把input的value设置为空，不然 无法两次选择同一张图片
-            let list = []
+            let list = {}
             list.name = file.name
             list.url = 'https://pic.heartqiu.cn/' + filename
-            console.log(list)
             that.fileList.push(list)
+            let obj = {}
+            obj.name = file.name
+            obj.url = 'https://pic.heartqiu.cn/' + filename
+            obj.nickName = that.$store.state.nickName
+            let theDate = new Date()
+            let month = theDate.getMonth() + 1
+            obj.date = theDate.getFullYear() + '-' + month + '-' + theDate.getDate()
+            obj.files = that.fileList
+            that.filesArray.push(obj)
           }).catch((err) => {
             console.log(err)
           })

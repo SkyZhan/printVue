@@ -6,8 +6,8 @@
       <el-col :xs="24" :md="4">⭐</el-col>
       <br/>
       <el-col :xs="24" :md="9">
-        <img v-if="list.openUp === '1'" src="../assets/shopStatus/open.jpg" class="pictype" alt="img"/>
-        <img v-else src="../assets/shopStatus/open.jpg" class="pictype" alt="img"/>
+        <img v-if="list.openUp === 1" src="../assets/shopStatus/open.jpg" class="pictype" alt="img"/>
+        <img v-else src="../assets/shopStatus/close.jpg" class="pictype" alt="img"/>
       </el-col>
       <el-col :xs="24" :md="6">
         <h3>{{list.name}}</h3>

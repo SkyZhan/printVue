@@ -8,8 +8,8 @@
           <span>{{this.$store.state.nickName}}</span>
         </el-header>
         <el-main >
-          <img v-if="ruleForm.openUp == '1' " src="../assets/shopStatus/open.jpg" style="width: 12rem;height: 7rem" alt="点击关闭店铺" @click="isOpen('1')"/>
-          <img v-if="ruleForm.openUp == '0' "  src="../assets/shopStatus/close.jpg" style="width: 12rem;height: 7rem" alt="点击关闭店铺" @click="isOpen('0')"/>
+          <img v-if="ruleForm.openUp == 1 " src="../assets/shopStatus/open.jpg" style="width: 12rem;height: 7rem" alt="点击关闭店铺" @click="isOpen('1')"/>
+          <img v-if="ruleForm.openUp == 0 "  src="../assets/shopStatus/close.jpg" style="width: 12rem;height: 7rem" alt="点击关闭店铺" @click="isOpen('0')"/>
           <div v-if="changeType">
             <h3>{{ruleForm.name}}</h3>
             <h4>地点：{{ruleForm.region}}楼{{ruleForm.roomNumber}}</h4>
@@ -154,29 +154,22 @@ export default {
       if (type === '0') {
         console.log('type' + type)
         that.axios
-          .get(that.$store.state.globalUrl + '/api/shop/open', {
-          }, {
-            headers: {
-              'accesstoken': that.$store.state.accesstoken,
-              'test': 'test'
-            }
-          })
+          .get(that.$store.state.globalUrl + '/api/shop/open', {openUp: 1},
+            {headers: {'accesstoken': that.$store.state.accesstoken}}
+          )
           .then(function (response) {
             console.log(response.headers)
-            that.ruleForm.openUp = '1'
+            that.ruleForm.openUp = 1
           })
       } else {
         console.log('else')
         that.axios
-          .get(that.$store.state.globalUrl + '/api/shop/close', {
-          }, {
-            headers: {
-              'accesstoken': that.$store.state.accesstoken
-            }
-          })
+          .get(that.$store.state.globalUrl + '/api/shop/close', {openUp: 0},
+            {headers: {'accesstoken': that.$store.state.accesstoken}
+            })
           .then(function (response) {
             console.log(response.data.desc)
-            that.ruleForm.openUp = '0'
+            that.ruleForm.openUp = 0
           })
       }
     },
