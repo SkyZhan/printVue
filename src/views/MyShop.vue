@@ -154,7 +154,7 @@ export default {
       if (type === '0') {
         console.log('type' + type)
         that.axios
-          .get(that.$store.state.globalUrl + '/api/shop/open', {openUp: 1},
+          .post(that.$store.state.globalUrl + '/api/shop/open', {openUp: 1},
             {headers: {'accesstoken': that.$store.state.accesstoken}}
           )
           .then(function (response) {
@@ -164,7 +164,7 @@ export default {
       } else {
         console.log('else')
         that.axios
-          .get(that.$store.state.globalUrl + '/api/shop/close', {openUp: 0},
+          .post(that.$store.state.globalUrl + '/api/shop/close', {openUp: 0},
             {headers: {'accesstoken': that.$store.state.accesstoken}
             })
           .then(function (response) {

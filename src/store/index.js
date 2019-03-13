@@ -9,7 +9,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     openId: '',
-    globalUrl: 'http://127.0.0.1:81',
+    globalUrl: 'http://api.print.heartqiu.cn',
     uid: '',
     openShop: '',
     cookie: '',
