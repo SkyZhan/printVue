@@ -38,7 +38,7 @@ export default {
   },
   mounted () {
     let that = this
-    // if (that.id != null) { localStorage.setItem('newID', this.id) }
+    if (that.id != null) { localStorage.setItem('newID', this.id) }
     let newID = this.id
     console.log(newID)
     that.axios

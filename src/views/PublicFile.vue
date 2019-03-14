@@ -3,10 +3,10 @@
     <Header></Header>
     <el-button type="text"  @click="isDialogFormVisible">上传公共文件</el-button>
     <el-row :gutter="10">
-      <el-col :xs="24" :md="7">
+      <el-col :xs="24" :md="6">
         ✨
       </el-col>
-      <el-col :xs="24" :md="12">
+      <el-col :xs="24" :md="14">
         <el-alert
           title="点击上传文件即可上传共享文件，点击文件名字即可下载所需文件"
           type="success"

@@ -112,35 +112,43 @@ export default {
     },
     onSubmit () {
       let that = this
-      let fileName = ''
-      let fileUrl = ''
-      for (let i = 0; i < that.fileList.length; i++) {
-        fileName = fileName + that.fileList[i].name + ' '
-        fileUrl = fileUrl + that.fileList[i].url + ' '
-      }
-      let thetag = that.delivery + ' ' + that.form.name + ' ' + that.form.phoneNumber + ' ' + that.form.region
-      let obj = {
-        sid: that.$route.params.shopId,
-        fileName: fileName,
-        fileUrl: fileUrl,
-        requirement: that.form.requirement,
-        tag: thetag,
-        status: '0'
-      }
-      that.axios
-        .post(that.$store.state.globalUrl + '/api/order/create', qs.stringify(obj),
-          {headers: {'accesstoken': that.$store.state.accesstoken}}
-        )
-        .then(function (response) {
-          console.log(response.data.desc)
-          that.$message({
-            showClose: true,
-            message: '订单上传成功',
-            type: 'success'
-          })
-          that.$router.push('/MyOrder')
+      if (that.form.name === '' || that.form.requirement === '') {
+        that.$message({
+          showClose: true,
+          message: '请填写完整信息',
+          type: 'warning'
         })
-      console.log('submit!' + thetag + fileUrl)
+      } else {
+        let fileName = ''
+        let fileUrl = ''
+        for (let i = 0; i < that.fileList.length; i++) {
+          fileName = fileName + that.fileList[i].name + ' '
+          fileUrl = fileUrl + that.fileList[i].url + ' '
+        }
+        let thetag = that.delivery + ' ' + that.form.name + ' ' + that.form.phoneNumber + ' ' + that.form.region
+        let obj = {
+          sid: that.$route.params.shopId,
+          fileName: fileName,
+          fileUrl: fileUrl,
+          requirement: that.form.requirement,
+          tag: thetag,
+          status: '0'
+        }
+        that.axios
+          .post(that.$store.state.globalUrl + '/api/order/create', qs.stringify(obj),
+            {headers: {'accesstoken': that.$store.state.accesstoken}}
+          )
+          .then(function (response) {
+            console.log(response.data.desc)
+            that.$message({
+              showClose: true,
+              message: '订单上传成功',
+              type: 'success'
+            })
+            that.$router.push('/MyOrder')
+          })
+        console.log('submit!' + thetag + fileUrl)
+      }
     },
     CouldDelivery (event) {
       console.log('取到的值是' + event.target.value)
